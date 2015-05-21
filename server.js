@@ -95,6 +95,6 @@ server.get('/schedule', function (req, res, next) {
     return next();
 });
 
-server.listen(8080, function () {
-    console.log('server active');
+server.listen(process.env.PORT || 8080, function () {
+    console.log('server active', server.url);
 });
