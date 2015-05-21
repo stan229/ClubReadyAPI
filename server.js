@@ -100,8 +100,6 @@ server.get('/schedule', function (req, res, next) {
     return next();
 });
 
-server.listen(process.env.PORT || 8080, function () {
-    console.log('server active on port ', process.env.PORT || 8080)
-    )
-    ;
+server.listen(process.env.PORT || 8080, function () {   
+    console.log('server active on port ', process.env.PORT || 8080);
 });
