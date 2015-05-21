@@ -17,11 +17,7 @@ function getSchedule() {
     var today = Date.now(),
         expires = localStorage.getItem('schedule_expires');
 
-    if (expires > today) {
-        return JSON.parse(localStorage.getItem('schedule'));
-    } else {
-        return loadScheduleDataForWeek();
-    }
+    return (expires > today) ? JSON.parse(localStorage.getItem('schedule')) : loadScheduleDataForWeek();
 }
 
 function loadScheduleDataForWeek() {
@@ -62,8 +58,8 @@ function parseContent(content) {
 function getTableData($, day) {
     var tables = $('#day' + day + '>table').find('table'),
         length = tables.length,
-        table,
         dayData = [],
+        table,
         session,
         i;
 
