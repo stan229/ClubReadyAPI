@@ -1,0 +1,1653 @@
+<html><head><link href="/css/clubready_cssbase_11309.css" rel="stylesheet" type="text/css">
+    <link href="/css/boxingblack.css" rel="stylesheet" type="text/css">
+    <style>
+        
+            body { background-color: #000000; }
+            
+        .classtext {
+	        font-family: "Lucida Sans Unicode", Verdana, serif;
+	        font-size: 18px;
+	        color: #F3C10E;
+	        text-decoration: none;
+	        line-height: 30px;
+	        font-weight: bold;
+        }
+        .classtext2 {
+	        font-family: "Lucida Sans Unicode", Verdana, serif;
+	        font-size: 11px;
+	        color: #F3C10E;
+	        text-decoration: none;
+	        line-height: 14px;
+	        font-weight: bold;
+        }
+        .classtext2l {
+	        font-family: "Lucida Sans Unicode", Verdana, serif;
+	        font-size: 11px;
+	        color: #F3C10E;
+	        text-decoration: underline;
+	        line-height: 14px;
+	        font-weight: bold;
+        }
+        .classtext2l:hover {
+            font-family: "Lucida Sans Unicode", Verdana, serif;
+	        font-size: 11px;
+	        color: #ff0000;
+	        text-decoration: underline;
+	        line-height: 14px;
+	        font-weight: bold;
+        }
+        .classtext3 {
+	        font-family: "Lucida Sans Unicode", Verdana, serif;
+	        font-size: 11px;
+	        color: #000000;
+	        text-decoration: none;
+	        line-height: 20px;
+	        font-weight: bold;
+        }
+        .classtext4 {
+	        font-family: "Lucida Sans Unicode", Verdana, serif;
+	        font-size: 18px;
+	        color: #000000;
+	        text-decoration: none;
+	        line-height: 20px;
+	        font-weight: bold;
+        }
+        .base-bar {
+        border-bottom:2px solid #F3C10E;
+        border-left:2px solid #F3C10E;
+        }
+        .base-bar2 {
+        border-bottom:2px solid #F3C10E;
+        }
+        .cltop {
+        background:#F3C10E;
+        }
+        #booknowouter {
+            position: absolute;
+            left: 50%;
+            top: 30px;
+            width: 480px;
+            height: 450px;
+            margin-left: -250px;
+            padding: 10px;
+            background: #ffffff;
+            border: 5px solid #cccccc;
+        }
+    </style>
+
+    <script type="text/javascript" src="/connections/clubready_adminjs_608.js"></script>
+
+    <script language="JavaScript" type="text/JavaScript">
+            var dy = '5/20/2015';
+            var cid = 0;
+
+            function updatethings() {
+                showspinner();
+                ran_number = Math.floor(Math.random() * 999999); 
+                
+                new Ajax.Updater(
+                    'workdiv', 
+                    'ajax_updateclassweek.asp', 
+                    {
+                        method: 'post', 
+                        evalScripts: true, 
+                        parameters: 'showclassspaces=&showbookingicon=1&classnameformat=3&classweekstyle=1&showclassduration=1&classdisplaystyle=&classtextcol=F3C10E&s=2695&cb=&r=' + ran_number + 
+                            '&dy=' + dy + 
+                            '&cid=' + cid
+                    }
+                );
+            }
+
+            function gopweek() {
+                dy = prevweek;
+                updatethings();
+            }
+
+            function gonweek() {
+                dy = nextweek;
+                updatethings();
+            }
+
+            function changeclass() {
+                cid = $F('classID');
+                updatethings();
+            }
+
+            function showbio(i) {
+                var ran_number=Math.floor(Math.random()*999999); 
+                Lightbox.showBoxByAJAX('staffbio.asp?s=2695&id='+i+'&r='+ran_number, 700, 400)
+            }
+
+            function showbio2(i,y) {
+                ran_number=Math.floor(Math.random()*999999); 
+                new Ajax.Updater('sidediv_'+y, 'staffbio.asp', {method:'post', evalScripts:true, parameters:'sd='+y+'&s=2695&id='+i+'&r='+ran_number});
+            }
+
+            function closebio(i) {
+                new Element.hide('sidediv_'+i);
+                $('sidediv_'+i).innerHTML = '';
+            }
+
+            
+
+            function updatecal() {
+                ran_number=Math.floor(Math.random()*999999); 
+                new Ajax.Updater('monthcal', 'ajax_classcalendar.asp', {method:'post', evalScripts:true, parameters:'r='+ran_number+'&dy='+dy});
+            }
+
+            function selectclassdate(i,y) {
+                dy = i;
+                updatethings();
+                if (y==1) {closethecal()};
+            }
+
+            function openthecal() {
+                new Element.hide('calimg');
+                new Element.show('monthcal');
+            }
+
+            function closethecal() {
+                new Element.hide('monthcal');
+                new Element.show('calimg');
+            }
+
+            function changeclasscalendar() {
+                cm = $('calmonth').options[$('calmonth').selectedIndex].value;
+                cy = $('calyear').options[$('calyear').selectedIndex].value;
+                dy= cm + '/1/' + cy;
+                updatethings();
+            }
+
+            function showclassdetail(i,y) {
+                ran_number = Math.floor(Math.random() * 999999); 
+                new Ajax.Updater('sidediv_' + y, 'classdetail.asp', {method:'post', evalScripts:true, parameters:'sd=' + y + '&id=' + i + '&r=' + ran_number});
+            }
+
+            function closeclass(i) {
+                new Element.hide('sidediv_' + i);
+                $('sidediv_' + i).innerHTML = '';
+            }
+
+            function booknow(cid) {
+                ran_number = Math.floor(Math.random() * 999999); 
+
+                new Ajax.Updater(
+                    'booknow',
+                    //'ajax_bookclass.asp',
+                    'apiblank.asp', // this is the standard prebuilt add prospect API form
+                    {
+                        method: 'post',
+                        evalScripts: true,
+                        parameters: 'apiKey=3BFD76B365FA35FEBD0411B71ABA670B65ABAEBBAD64623C&cid=' + cid + '&r=' + ran_number
+                    }
+                );
+
+                new Element.show('booknowouter');
+            }
+
+            function closebook() {
+                new Element.hide('booknowouter');
+            }
+
+            function dobooknow() {
+                ran_number = Math.floor(Math.random() * 999999); 
+
+                er = '';
+                if ($F('firstname') == '') { er = er + 'Please enter your first name\n' };
+                if ($F('lastname') == '') { er = er + 'Please enter your last name\n' };
+                if ($('gender').selectedIndex == 0) { er = er + 'Please select male or female\n' };
+                if ($F('emailok') == 0) { er = er + 'Please enter your email\n' };
+                if ($F('phone') == '') { er = er + 'Please enter your phone number\n' };
+
+                if (er == '') { $('cr_form').submit() } else { alert(er) };
+                //if (er == '') { 
+                //    new Ajax.Updater(
+                //        'workdiv', 
+                //        'ajax_dobookclass.asp', 
+                //        {
+                //            method: 'post', 
+                //            evalScripts: true, 
+                //            parameters: Form.serialize('cr_form')
+                //        }
+                //    );
+                //} 
+                //else { 
+                //    alert(er) 
+                //};
+            }
+
+            //function checkemail(em) {
+            //    var ran_number = Math.floor(Math.random() * 999999);
+            //    new Ajax.Updater('cr_wkdiv', '/admin/ajax_checkemail.asp', { method: 'post', evalScripts: true, parameters: 'em=' + escape(em) + '&r=' + ran_number })
+            //}
+
+            function checkemail() {
+                var ran_number = Math.floor(Math.random() * 999999);
+                new Ajax.Updater('cr_wkdiv', '/admin/ajax_checkemail.asp', { method: 'post', evalScripts: true, parameters: 'em=' + escape($F('email')) + '&r=' + ran_number })
+            }
+    </script>
+
+    </head><body><div id="booknowouter" style="display: none;">
+        <div style="float: right;">
+            <img src="../../images/close3.gif" onclick="closebook()" width="25" height="24">
+        </div>
+        <div id="booknow"></div>
+    </div>
+
+    <table width="100%" align="center" cellpadding="0" cellspacing="0" style="border: 2px solid #F3C10E">
+        <tbody><tr>
+            <td colspan="7">
+                <table width="100%" border="0" align="center" cellpadding="6" cellspacing="0">
+                    <tbody><tr>
+                        <td bgcolor="#000000" width="7%">
+                            <b><a href="javascript:gopweek()"><img src="../../images/classprev.gif" title="Go To Previous Week" alt="Go To Previous Week" width="48" height="48" border="0"></a></b>
+                            <div id="fclass" style="border: 5px solid #cccccc; background: #ffffff; width: 550px; height: 550px; position: absolute; display: none;"></div>
+                        </td>
+                        <td bgcolor="#000000" width="86%">
+                            <div align="center">
+                                <span class="classtext">
+                                    <img src="/images/notwaiting.gif" name="spinner" width="20" height="20" id="spinner"><span id="weekrange">5/20/2015 -  5/26/2015</span> </span>
+                                <img src="../../images/cal.gif" alt="Open The Calendar To Select A Date" name="calimg" width="16" height="16" id="calimg" title="Open The Calendar To Select A Date" onclick="openthecal()" style="margin-left: 15px"><span id="monthcal" class="floatcal" style="display: none; margin-left: 15px;">
+
+<div id="caltopbar"><table width="100%" border="0" align="center" cellpadding="2" cellspacing="0" bgcolor="#f5f5f5" class="tableborder">
+  <tbody><tr class="caltop">
+    <td>&nbsp;</td>
+    <td colspan="5" class="text2"><div align="center" class="text2">Select A Date</div></td>
+    <td>&nbsp;</td>
+    <td valign="middle"><div align="right"><img src="../../images/closecal.gif" alt="Click To Close Calendar Body" title="Click To Close Calendar" width="12" height="12" onclick="closethecal()"></div></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td width="16%"><div align="right"><b><img src="../../images/smallprev.gif" alt="Go To Previous Week" width="15" height="15" onclick="selectclassdate('4/1/2015',0)"></b></div></td>
+    <td colspan="5" class="text2"><div align="center">
+        <select name="calmonth" class="formfield" id="calmonth" onchange="changeclasscalendar()">
+          <option value="1">Jan</option>
+          <option value="2">Feb</option>
+          <option value="3">Mar</option>
+          <option value="4">Apr</option>
+          <option value="5" selected="">May</option>
+          <option value="6">Jun</option>
+          <option value="7">Jul</option>
+          <option value="8">Aug</option>
+          <option value="9">Sep</option>
+          <option value="10">Oct</option>
+          <option value="11">Nov</option>
+          <option value="12">Dec</option>
+        </select>
+        <select name="calyear" id="calyear" class="formfield" onchange="changeclasscalendar()">
+          
+          <option value="2014">2014</option>
+          
+          <option value="2015" selected="">2015</option>
+          
+          <option value="2016">2016</option>
+          
+          <option value="2017">2017</option>
+          
+          <option value="2018">2018</option>
+          
+          <option value="2019">2019</option>
+          
+        </select>
+    </div></td>
+    <td width="18%"><div align="left"><b><img src="../../images/smallnext.gif" alt="Go To Next Week" width="15" height="15" onclick="selectclassdate('6/1/2015',0)"></b></div></td>
+    <td width="1%" valign="bottom">&nbsp;</td>
+  </tr>
+</tbody></table>
+</div><div id="monthbody">
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" bgcolor="#f5f5f5" class="tableborder">
+  <tbody><tr>
+    <td class="smallcal" width="14%"><div align="center" class="HeaderTxt">M</div></td>
+    <td width="14%" class="smallcal"><div align="center" class="HeaderTxt">T</div></td>
+    <td width="14%" class="smallcal"><div align="center" class="HeaderTxt">W</div></td>
+    <td width="14%" class="smallcal"><div align="center" class="HeaderTxt">T</div></td>
+    <td width="14%" class="smallcal"><div align="center" class="HeaderTxt">F</div></td>
+    <td width="14%" class="smallcal"><div align="center" class="HeaderTxt">S</div></td>
+    <td width="14%" class="smallcal"><div align="center" class="HeaderTxt">S</div></td>
+  </tr>
+  <tr>
+    
+    <td>&nbsp;</td>
+    
+    <td>&nbsp;</td>
+    
+    <td>&nbsp;</td>
+    
+    <td>&nbsp;</td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/1/2015',1)">1</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/2/2015',1)">2</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/3/2015',1)">3</a></div></td>
+    </tr><tr>
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/4/2015',1)">4</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/5/2015',1)">5</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/6/2015',1)">6</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/7/2015',1)">7</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/8/2015',1)">8</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/9/2015',1)">9</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/10/2015',1)">10</a></div></td>
+    </tr><tr>
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/11/2015',1)">11</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/12/2015',1)">12</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/13/2015',1)">13</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/14/2015',1)">14</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/15/2015',1)">15</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/16/2015',1)">16</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/17/2015',1)">17</a></div></td>
+    </tr><tr>
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/18/2015',1)">18</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/19/2015',1)">19</a></div></td>
+    
+    <td class="calselect"><div align="center"><a href="javascript:selectclassdate('5/20/2015',1)">20</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/21/2015',1)">21</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/22/2015',1)">22</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/23/2015',1)">23</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/24/2015',1)">24</a></div></td>
+    </tr><tr>
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/25/2015',1)">25</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/26/2015',1)">26</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/27/2015',1)">27</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/28/2015',1)">28</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/29/2015',1)">29</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/30/2015',1)">30</a></div></td>
+    
+    <td bgcolor="#FFFFFF"><div align="center"><a href="javascript:selectclassdate('5/31/2015',1)">31</a></div></td>
+    </tr><tr>
+  </tr>
+</tbody></table>
+</div>
+</span><br>
+                                
+                            </div>
+                        </td>
+                        <td bgcolor="#000000" width="7%">
+                            <div align="right">
+                                <b><a href="javascript:gonweek()"><img src="../../images/classnext.gif" title="Go To Next Week" alt="Go To Next Week" width="48" height="48" border="0"></a></b>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+        
+            <tr bgcolor="#classtextcol%&gt;">
+                <td width="14%" bgcolor="#F3C10E">
+                    <div align="center" id="daytop1"><div class="pointer">
+<table width="100%" cellpadding="1" cellspacing="0" class="cltop">
+  <tbody><tr>
+    <td><div align="center"><span class="classtext3">WED</span><br><span class="classtext4">20</span>
+              </div>
+       </td>
+  </tr>
+</tbody></table></div>
+
+</div>
+                </td>
+                <td width="14%" bgcolor="#F3C10E">
+                    <div align="center" id="daytop2"><div class="pointer">
+<table width="100%" cellpadding="1" cellspacing="0" class="cltop">
+  <tbody><tr>
+    <td><div align="center"><span class="classtext3">THU</span><br><span class="classtext4">21</span>
+              </div>
+       </td>
+  </tr>
+</tbody></table></div>
+
+</div>
+                </td>
+                <td width="14%" bgcolor="#F3C10E">
+                    <div align="center" id="daytop3"><div class="pointer">
+<table width="100%" cellpadding="1" cellspacing="0" class="cltop">
+  <tbody><tr>
+    <td><div align="center"><span class="classtext3">FRI</span><br><span class="classtext4">22</span>
+              </div>
+       </td>
+  </tr>
+</tbody></table></div>
+
+</div>
+                </td>
+                <td width="14%" bgcolor="#F3C10E">
+                    <div align="center" id="daytop4"><div class="pointer">
+<table width="100%" cellpadding="1" cellspacing="0" class="cltop">
+  <tbody><tr>
+    <td><div align="center"><span class="classtext3">SAT</span><br><span class="classtext4">23</span>
+              </div>
+       </td>
+  </tr>
+</tbody></table></div>
+
+</div>
+                </td>
+                <td width="14%" bgcolor="#F3C10E">
+                    <div align="center" id="daytop5"><div class="pointer">
+<table width="100%" cellpadding="1" cellspacing="0" class="cltop">
+  <tbody><tr>
+    <td><div align="center"><span class="classtext3">SUN</span><br><span class="classtext4">24</span>
+              </div>
+       </td>
+  </tr>
+</tbody></table></div>
+
+</div>
+                </td>
+                <td width="14%" bgcolor="#F3C10E">
+                    <div align="center" id="daytop6"><div class="pointer">
+<table width="100%" cellpadding="1" cellspacing="0" class="cltop">
+  <tbody><tr>
+    <td><div align="center"><span class="classtext3">MON</span><br><span class="classtext4">25</span>
+              </div>
+       </td>
+  </tr>
+</tbody></table></div>
+
+</div>
+                </td>
+                <td width="14%" bgcolor="#F3C10E">
+                    <div align="center" id="daytop7"><div class="pointer">
+<table width="100%" cellpadding="1" cellspacing="0" class="cltop">
+  <tbody><tr>
+    <td><div align="center"><span class="classtext3">TUE</span><br><span class="classtext4">26</span>
+              </div>
+       </td>
+  </tr>
+</tbody></table></div>
+
+</div>
+                </td>
+            </tr>
+            <tr>
+                <td height="160" valign="top" style="border-right: 2px solid #F3C10E">
+                    <div id="day1">
+
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
+    
+    <tbody><tr>
+        <td>
+            <div align="center">
+                
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        9:30 AM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        5:00 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4826584)">BEN B</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(4940481)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        6:30 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(5694432)">WHITNEY F</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(4940533)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        8:00 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4826584)">BEN B</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(4940585)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+
+</div>
+                </td>
+                <td valign="top" style="border-right: 2px solid #F3C10E">
+                    <div id="day2">
+
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
+    
+    <tbody><tr>
+        <td>
+            <div align="center">
+                
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        9:30 AM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4826584)">BEN B</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023706)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        4:30 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4827385)">ROB F</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023819)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        6:00 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4074275)">MEGAN B</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023867)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        7:30 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4827368)">PAULINA L</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023915)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+
+</div>
+                </td>
+                <td valign="top" style="border-right: 2px solid #F3C10E">
+                    <div id="day3">
+
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
+    
+    <tbody><tr>
+        <td>
+            <div align="center">
+                
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        9:30 AM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4074275)">MEGAN B</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023762)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        4:30 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4827378)">MATT A</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023963)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        6:00 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4827378)">MATT A</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5024011)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+
+</div>
+                </td>
+                <td valign="top" style="border-right: 2px solid #F3C10E">
+                    <div id="day4">
+
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
+    
+    <tbody><tr>
+        <td>
+            <div align="center">
+                
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        10:00 AM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <span class="classtext2"><i>No Instructor Yet</i></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(4940739)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        11:00 AM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <span class="classtext2"><i>No Instructor Yet</i></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(4940790)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+
+</div>
+                </td>
+                <td valign="top" style="border-right: 2px solid #F3C10E">
+                    <div id="day5">
+
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
+    
+    <tbody><tr>
+        <td>
+            <div align="center">
+                
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        10:00 AM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4908587)">SHEM P</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(4940842)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        11:00 AM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4908587)">SHEM P</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(4940893)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+
+</div>
+                </td>
+                <td valign="top" style="border-right: 2px solid #F3C10E">
+                    <div id="day6">
+
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
+    
+    <tbody><tr>
+        <td>
+            <div align="center">
+                
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        5:00 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(5787137)">CANCELED !</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023206)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        6:30 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(5787137)">CANCELED !</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023263)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        8:00 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(5787137)">CANCELED !</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023322)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+
+</div>
+                </td>
+                <td valign="top">
+                    <div id="day7">
+
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
+    
+    <tbody><tr>
+        <td>
+            <div align="center">
+                
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        9:30 AM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4074275)">MEGAN B</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023438)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        4:30 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4074275)">MEGAN B</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023487)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        6:00 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4827368)">PAULINA L</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023537)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tbody><tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        7:30 PM</b></span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <span class="classtext2"><b>
+                                        CKO
+                                            <!-- desc pop -->
+                                            
+                                        <!--  -->
+                                    </b></span>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <span class="classtext2">
+                                            1 hour</span></div>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <div align="center" class="classtext2">
+                                            <a class="classtext2l" href="javascript:showbio(4908587)">SHEM P</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <a class="classtext2" style="font-weight:bold;" href="javascript:booknow(5023594)"><img src="/images/bookfreeclass_buttonsmall.png" alt="TRY FREE"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                    </tbody></table>
+                    <br>
+                    
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+
+
+    
+    </div>
+                </td>
+            </tr>
+            
+    </tbody></table>
+
+    <div id="workdiv">
+
+
+</div>
+
+    <script language="JavaScript" type="text/JavaScript">
+        updatethings();
+        
+            $('classID').selectedIndex = 0;
+            
+    </script>
+    </body></html>
+
