@@ -25,7 +25,7 @@ function getSchedule() {
 }
 
 function loadScheduleDataForWeek() {
-    var stdout = childProcess.execFileSync(path.join(__dirname, 'bin/phantomjs'), [path.join(__dirname, 'phantom-script.js')]),
+    var stdout = childProcess.execFileSync('phantomjs', [path.join(__dirname, 'phantom-script.js')]),
         schedule = parseContent(stdout),
         tomorrow = new Date();
 
@@ -100,6 +100,6 @@ server.get('/schedule', function (req, res, next) {
     return next();
 });
 
-server.listen(process.env.PORT || 8080, function () {   
+server.listen(process.env.PORT || 8080, function () {
     console.log('server active on port ', process.env.PORT || 8080);
 });
