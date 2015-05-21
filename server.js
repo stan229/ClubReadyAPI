@@ -90,11 +90,18 @@ var server = restify.createServer();
 
 server.use(restify.CORS());
 
+server.get('/', function (req, res, next) {
+    res.send('Hello World');
+    next();
+});
+
 server.get('/schedule', function (req, res, next) {
     res.json(getSchedule());
     return next();
 });
 
 server.listen(process.env.PORT || 8080, function () {
-    console.log('server active', server.url);
+    console.log('server active on port ', process.env.PORT || 8080)
+    )
+    ;
 });
