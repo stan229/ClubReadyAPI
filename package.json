@@ -16,12 +16,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/stan229/ClubReadyAPI"
   },
   "keywords": [
-    "node",
-    "heroku",
-    "express"
   ],
   "license": "MIT"
 }
