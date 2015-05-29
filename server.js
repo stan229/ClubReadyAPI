@@ -42,7 +42,7 @@ function parseContent(content) {
 
 
     for (i = 0; i < 7; i++) {
-        classDate.setDate(classDate.getDate() + 1);
+        classDate.setDate(classDate.getDate() + (i ? 1 : 0));
 
         schedule.push({
             date     : classDate.toISOString(),
