@@ -42,7 +42,7 @@ function parseContent(content) {
 
 
     for (i = 0; i < 7; i++) {
-        classDate.setDate(classDate.getDate() + i);
+        classDate.setDate(classDate.getDate() + 1);
 
         schedule.push({
             date     : classDate.toISOString(),
@@ -93,6 +93,10 @@ server.get('/', function (req, res, next) {
     next();
 });
 
+server.get('/schedule/', function (req, res, next) {
+    res.json(getSchedule());
+    return next();
+});
 
 server.get('/schedule/:force', function (req, res, next) {
     if(req.params.force === 'true') {
