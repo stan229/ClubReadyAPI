@@ -64,7 +64,7 @@ exports.getClassSchedule = function (clientKey) {
             waitFor(function () {
                 return page.evaluate(function () {
                     return !!document.querySelector('#day7 > table');
-                })
+                });
             }, function () {
                 console.log(page.content);
                 phantom.exit();

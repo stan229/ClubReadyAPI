@@ -15,9 +15,9 @@ var indexToKey = ['time', 'clubName', 'duration', 'instructor'];
 
 function getSchedule() {
     var today = Date.now(),
-        expires = localStorage.getItem('schedule_expires');
+        expires = localStorage.getItem('schedule_expires') || 0;
 
-    return (expires > today) ? JSON.parse(localStorage.getItem('schedule')) : loadScheduleDataForWeek();
+    return (parseInt(expires, 10) > today) ? JSON.parse(localStorage.getItem('schedule')) : loadScheduleDataForWeek();
 }
 
 function loadScheduleDataForWeek() {
@@ -25,7 +25,6 @@ function loadScheduleDataForWeek() {
         schedule = parseContent(stdout),
         tomorrow = new Date();
 
-    tomorrow.setHours(0, 0, 0, 0);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     localStorage.setItem('schedule', JSON.stringify(schedule));
@@ -41,13 +40,12 @@ function parseContent(content) {
         classDate = new Date(),
         i;
 
-    classDate.setHours(0, 0, 0, 0);
 
     for (i = 0; i < 7; i++) {
         classDate.setDate(classDate.getDate() + i);
 
         schedule.push({
-            date     : classDate.getTime(),
+            date     : classDate.toISOString(),
             schedule : getTableData($, i + 1)
         });
     }
@@ -82,6 +80,10 @@ function getTableData($, day) {
     return dayData;
 }
 
+function clearLocalStorage() {
+    localStorage.removeItem('schedule');
+    localStorage.removeItem('schedule_expires');
+}
 var server = restify.createServer();
 
 server.use(restify.CORS());
@@ -91,7 +93,11 @@ server.get('/', function (req, res, next) {
     next();
 });
 
-server.get('/schedule', function (req, res, next) {
+
+server.get('/schedule/:force', function (req, res, next) {
+    if(req.params.force === 'true') {
+        clearLocalStorage();
+    }
     res.json(getSchedule());
     return next();
 });
