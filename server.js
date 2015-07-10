@@ -5,79 +5,86 @@
  * Time: 10:13 AM
  */
 var path = require('path'),
-    childProcess = require('child_process'),
     LocalStorage = require('node-localstorage').LocalStorage,
     localStorage = new LocalStorage("./storage"),
     cheerio = require('cheerio'),
-    restify = require('restify');
+    qs      = require('querystring'),
+    restify = require('restify'),
+    exec    = require('child_process').execFileSync;
 
 var indexToKey = ['time', 'clubName', 'duration', 'instructor'];
 
 function getSchedule() {
-    var today = Date.now(),
-        expires = localStorage.getItem('schedule_expires') || 0;
-
-    return (parseInt(expires, 10) > today) ? JSON.parse(localStorage.getItem('schedule')) : loadScheduleDataForWeek();
+    return loadScheduleDataForWeek();
 }
 
 function loadScheduleDataForWeek() {
-    var stdout = childProcess.execFileSync('phantomjs', [path.join(__dirname, 'phantom-script.js')]),
-        schedule = parseContent(stdout),
-        tomorrow = new Date();
+    var postData,
+        htmlData,
+        schedule;
 
-    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    localStorage.setItem('schedule', JSON.stringify(schedule));
-    localStorage.setItem('schedule_expires', tomorrow.getTime());
+    postData = qs.stringify({
+        s        : 2695,
+        dy       : '',
+        cid      : 0,
+        pb       : 1,
+        cb       : 1,
+        cp       : 1,
+        ppbt     : '',
+        cbt      : '',
+        inf      : 0,
+        sc       : 0,
+        r        : Math.floor(Math.random() * (2282851 - 228285)) + 22825,
+        dispClub : 'undefined'
+    });
+
+    htmlData = exec('curl',['-s','--data',postData,'https://www.clubready.com/common/widgets/ClassPublish/ajax_updateclassweek.asp']).toString();
+    schedule = parseContent(htmlData);
 
     return schedule;
 }
-
 
 function parseContent(content) {
     var $ = cheerio.load(content),
+        tableRows = $('>tr','#classesTable'),
+        length = tableRows.length,
         schedule = [],
-        classDate = new Date(),
+        classDate,
+        scheduleDay,
+        tableRow,
+        rowCells,
         i;
 
 
-    for (i = 0; i < 7; i++) {
-        classDate.setDate(classDate.getDate() + (i ? 1 : 0));
+    for(i = 0; i < length; i++) {
+        tableRow = tableRows[i];
 
-        schedule.push({
-            date     : classDate.toISOString(),
-            schedule : getTableData($, i + 1)
-        });
-    }
-
-    return schedule;
-}
-
-function getTableData($, day) {
-    var tables = $('#day' + day + '>table').find('table'),
-        length = tables.length,
-        dayData = [],
-        table,
-        session,
-        i;
-
-    for (i = 0; i < length; i++) {
-
-        table = tables[i];
-        session = {};
-
-        $(table).find('tr').each(function (index, value) {
-            var $row = $(this);
-
-            if (index < 4) {
-                session[indexToKey[index]] = $row.find('td').text().replace(/\n/g, '').trim();
+        if(!Object.keys(tableRow.attribs).length) {
+            if(scheduleDay) {
+                schedule.push(scheduleDay);
             }
-        });
 
-        dayData.push(session);
+            classDate = new Date(Date.parse($(tableRow).find('.accentText')[1].children[0].data));
+
+            scheduleDay = {
+                date     : classDate.toISOString(),
+                schedule : []
+            };
+
+        }
+        if(tableRow.attribs.class) {
+            rowCells = $(tableRow).children('td');
+            scheduleDay.schedule.push({
+                time       : rowCells[0].children[0].data,
+                instructor : $(rowCells[2]).text(),
+                duration   : $(rowCells[4]).text().split('\n')[0]
+            })
+        }
     }
 
-    return dayData;
+    schedule.push(scheduleDay);
+    return schedule;
 }
 
 function clearLocalStorage() {
