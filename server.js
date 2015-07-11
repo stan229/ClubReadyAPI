@@ -7,7 +7,8 @@
 var cheerio = require('cheerio'),
     https   = require('https'),
     qs      = require('querystring'),
-    restify = require('restify');
+    restify = require('restify'),
+    moment  = require('moment');
 
 function loadScheduleDataForWeek(serverRes) {
     var options,
@@ -43,7 +44,7 @@ function loadScheduleDataForWeek(serverRes) {
     };
 
     dataChunks = [];
-    
+
     req = https.request(options, function (res) {
             res.on('data', function (chunk) {
                 dataChunks.push(chunk);
@@ -85,7 +86,7 @@ function parseContent(content) {
             classDate = new Date(Date.parse($(tableRow).find('.accentText')[1].children[0].data));
 
             scheduleDay = {
-                date     : classDate.toISOString(),
+                date     : moment(classDate, 'MMM DD, YYYY').toISOString(),
                 schedule : []
             };
 
