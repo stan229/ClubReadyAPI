@@ -83,7 +83,7 @@ function parseContent(content) {
                 schedule.push(scheduleDay);
             }
 
-            classDate = $(tableRow).find('.accentText')[1].children[0].data);
+            classDate = $(tableRow).find('.accentText')[1].children[0].data;
 
             scheduleDay = {
                 date     : moment(classDate, 'MMM DD, YYYY').toISOString(),
