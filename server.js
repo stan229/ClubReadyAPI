@@ -4,25 +4,18 @@
  * Date: 5/20/15
  * Time: 10:13 AM
  */
-var path = require('path'),
-    LocalStorage = require('node-localstorage').LocalStorage,
-    localStorage = new LocalStorage("./storage"),
-    cheerio = require('cheerio'),
+var cheerio = require('cheerio'),
+    https   = require('https'),
     qs      = require('querystring'),
-    restify = require('restify'),
-    exec    = require('child_process').execFileSync;
+    restify = require('restify');
 
-var indexToKey = ['time', 'clubName', 'duration', 'instructor'];
-
-function getSchedule() {
-    return loadScheduleDataForWeek();
-}
-
-function loadScheduleDataForWeek() {
-    var postData,
+function loadScheduleDataForWeek(serverRes) {
+    var options,
+        postData,
         htmlData,
-        schedule;
-
+        schedule,
+        req,
+        dataChunks;
 
     postData = qs.stringify({
         s        : 2695,
@@ -39,10 +32,32 @@ function loadScheduleDataForWeek() {
         dispClub : 'undefined'
     });
 
-    htmlData = exec('curl',['-s','--data',postData,'https://www.clubready.com/common/widgets/ClassPublish/ajax_updateclassweek.asp']).toString();
-    schedule = parseContent(htmlData);
+    options = {
+        hostname : 'www.clubready.com',
+        path     : '/common/widgets/ClassPublish/ajax_updateclassweek.asp',
+        method   : 'POST',
+        headers  : {
+            'Content-Type'   : 'application/x-www-form-urlencoded',
+            'Content-Length' : postData.length
+        }
+    };
 
-    return schedule;
+    req = https.request(options, function (res) {
+            res.on('data', function (chunk) {
+                dataChunks.push(chunk);
+            });
+            res.on('end', function () {
+                htmlData = dataChunks.join('').toString();
+
+                schedule = parseContent(htmlData);
+
+                serverRes.json(schedule);
+            });
+        }
+    );
+
+    req.write(postData);
+    req.end();
 }
 
 function parseContent(content) {
@@ -76,7 +91,7 @@ function parseContent(content) {
         if(tableRow.attribs.class) {
             rowCells = $(tableRow).children('td');
             scheduleDay.schedule.push({
-                time       : rowCells[0].children[0].data,
+                time       : rowCells[0].children[0].data.toUpperCase(),
                 instructor : $(rowCells[2]).text(),
                 duration   : $(rowCells[4]).text().split('\n')[0]
             })
@@ -84,33 +99,20 @@ function parseContent(content) {
     }
 
     schedule.push(scheduleDay);
+
     return schedule;
 }
 
-function clearLocalStorage() {
-    localStorage.removeItem('schedule');
-    localStorage.removeItem('schedule_expires');
-}
 var server = restify.createServer();
 
 server.use(restify.CORS());
 
 server.get('/', function (req, res, next) {
-    res.send('Hello World');
     next();
 });
 
 server.get('/schedule/', function (req, res, next) {
-    res.json(getSchedule());
-    return next();
-});
-
-server.get('/schedule/:force', function (req, res, next) {
-    if(req.params.force === 'true') {
-        clearLocalStorage();
-    }
-    res.json(getSchedule());
-    return next();
+    loadScheduleDataForWeek(res);
 });
 
 server.listen(process.env.PORT || 8080, function () {
